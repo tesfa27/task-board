@@ -15,3 +15,5 @@ export const statuses = {
     background: "#F7D4D3",
   },
 };
+
+export const icons = ["👨🏻‍💻", "💬", "☕", "🏋️‍♂️", "📚", "⏰"];
