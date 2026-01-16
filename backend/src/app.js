@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import boardRoutes from "./routes/board.routes.js";
+import taskRoutes from "./routes/task.routes.js";
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/boards', boardRoutes);
+app.use("/api/tasks", taskRoutes);
 
 // Export the "app" object
 export default app;
