@@ -1,8 +1,11 @@
 import Board from "../models/Board.js";
 import Task from "../models/Task.js";
+import connectDB from "../config/db.js";
 
 export const createBoard = async (req, res) => {
   try {
+    await connectDB();
+    
     const board = await Board.create({
       name: "My Task Board",
       description: "Tasks to keep organised",
@@ -26,6 +29,7 @@ export const createBoard = async (req, res) => {
 
 export const getBoardById = async (req, res) => {
   try {
+    await connectDB();
     const board = await Board.findById(req.params.id).populate("tasks");
 
     if (!board) {
