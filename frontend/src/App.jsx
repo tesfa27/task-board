@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import Header from "./components/Header"
 import TaskCard from "./components/TaskCard"
 import TaskDrawer from "./components/TaskDrawer"
+import LoadingSpinner from "./components/LoadingSpinner"
 import { useBoardStore } from "./store/boardStore"
 
 function App() {
@@ -22,12 +23,12 @@ function App() {
     initializeBoard(boardId)
   }, [])
 
-  if (isLoading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+  if (isLoading) return <LoadingSpinner />
 
   return (
     <main>
       <div className="flex flex-col items-center min-h-screen bg-gray-50 py-4 md:py-8">
-        <div className="flex flex-col w-full max-w-xl gap-4 px-4">
+        <div className="flex flex-col w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl gap-4 px-4">
           <Header />
           {tasks.map((task) => (
             <TaskCard key={task._id} task={task} />
