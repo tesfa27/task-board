@@ -39,15 +39,15 @@ const TaskDrawer = ({ onClose }) => {
   }
 
   return (
-    <aside className="fixed right-0 top-0 h-screen w-full md:w-[600px] md:max-w-[600px] flex flex-col bg-white md:rounded-l-2xl">
-      <header className="flex justify-between items-center p-6 pb-4">
+    <aside className="fixed right-0 top-0 h-dvh w-full md:w-[600px] md:max-w-[600px] flex flex-col bg-white md:rounded-l-2xl overflow-hidden md:h-screen">
+      <header className="flex-shrink-0 flex justify-between items-center p-6 pb-4">
         <h2 className="m-0 font-outfit font-medium text-lg">Task Details</h2>
         <button type="button" aria-label="Close" onClick={onClose} className="border border-gray-300 rounded-xl p-2 bg-transparent cursor-pointer">
           <img src="/close_ring_duotone-1.svg" alt="Close" />
         </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-6">
+      <main className="flex-1 overflow-y-auto px-6 pb-20 min-h-0">
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="taskName" className="font-outfit font-normal text-[14px] text-gray-400">Task Name</label>
@@ -62,11 +62,11 @@ const TaskDrawer = ({ onClose }) => {
 
           <div className="flex flex-col gap-2">
             <label className="font-outfit font-normal text-[14px] text-gray-400">Icon</label>
-            <div role="group" aria-label="Icon selector" className="flex gap-3">
+            <div role="group" aria-label="Icon selector" className="flex flex-wrap gap-3">
               {icons.map((icon, index) => (
                 <button key={index} type="button" 
                   onClick={() => setFormData({ ...formData, icon })}
-                  className={` rounded-lg p-3 text-2xl ${formData.icon === icon ? 'bg-[#F5D565]' : 'bg-gray-100'}`}>{icon}</button>
+                  className={`rounded-lg p-2 sm:p-3 text-xl sm:text-2xl flex-shrink-0 ${formData.icon === icon ? 'bg-[#F5D565]' : 'bg-gray-100'}`}>{icon}</button>
               ))}
             </div>
           </div>
@@ -91,7 +91,7 @@ const TaskDrawer = ({ onClose }) => {
         </form>
       </main>
 
-      <footer className="flex justify-end items-center gap-3 p-4 bg-white border-t border-gray-200 md:p-0 md:bg-transparent md:border-t-0">
+      <footer className="flex-shrink-0 flex justify-end items-center gap-3 p-4 bg-white border-t border-gray-200 md:p-6 md:bg-transparent md:border-t-0">
         <button onClick={handleDelete} type="button" className='flex items-center gap-1 rounded-2xl px-4 py-3 font-outfit font-medium text-[14px] text-white bg-[#97A3B6]'>
           Delete
           <img src="/Trash.svg" alt="Delete" className="w-5 h-5" />
