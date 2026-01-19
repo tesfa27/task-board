@@ -10,10 +10,46 @@ export const useBoardStore = create((set, get) => ({
   isDrawerOpen: false,
   isLoading: false,
   error: null,
+  initialized: false,
 
   // Actions
+  initializeBoard: async (boardId = null) => {
+    const { initialized } = get();
+    if (initialized) return;
+    
+    set({ isLoading: true, error: null, initialized: true });
+    
+    if (boardId) {
+      // Load existing board
+      try {
+        await get().fetchBoard(boardId)
+      } catch (error) {
+        // Board not found, create new one
+        const newBoardId = await get().createBoard()
+        window.history.replaceState(null, '', `/board/${newBoardId}`)
+      }
+    } else {
+      // Check localStorage for existing board
+      const savedBoardId = localStorage.getItem('currentBoardId')
+      if (savedBoardId) {
+        try {
+          await get().fetchBoard(savedBoardId)
+          window.history.replaceState(null, '', `/board/${savedBoardId}`)
+        } catch (error) {
+          // Saved board not found, create new one
+          const newBoardId = await get().createBoard()
+          localStorage.setItem('currentBoardId', newBoardId)
+          window.history.replaceState(null, '', `/board/${newBoardId}`)
+        }
+      } else {
+        // First visit, create new board
+        const newBoardId = await get().createBoard()
+        localStorage.setItem('currentBoardId', newBoardId)
+        window.history.replaceState(null, '', `/board/${newBoardId}`)
+      }
+    }
+  },
   createBoard: async () => {
-    set({ isLoading: true, error: null });
     try {
       const response = await apiClient('/api/boards', {
         method: 'POST',
@@ -25,6 +61,7 @@ export const useBoardStore = create((set, get) => ({
         tasks: response.tasks,
         isLoading: false 
       });
+      localStorage.setItem('currentBoardId', response.board._id);
       return response.board._id;
     } catch (error) {
       set({ error: error.message, isLoading: false });
@@ -33,7 +70,6 @@ export const useBoardStore = create((set, get) => ({
   },
 
   fetchBoard: async (id) => {
-    set({ isLoading: true, error: null });
     try {
       const board = await apiClient(`/api/boards/${id}`);
       set({ 
