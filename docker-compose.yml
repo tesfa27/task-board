@@ -29,6 +29,7 @@ services:
       - task-board-network
 
   frontend:
+    image: ghcr.io/tesfa27/task-board:frontend-latest
     build:
       context: ./frontend
       args:
