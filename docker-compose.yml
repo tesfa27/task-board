@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: task-board-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: taskboard
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - task-board-network
+
+  backend:
+    image: ghcr.io/tesfa27/task-board:backend-latest
+    container_name: task-board-backend
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/taskboard
+      - PORT=3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    networks:
+      - task-board-network
+
+  frontend:
+    image: ghcr.io/tesfa27/task-board:frontend-latest
+    container_name: task-board-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - task-board-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  task-board-network:
+    driver: bridge
